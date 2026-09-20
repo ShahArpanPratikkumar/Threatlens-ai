@@ -1,31 +1,10 @@
 import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
-import apiRouter from './server/routes/api.ts';
+import app from './server/app.ts';
 
 async function startServer() {
-  const app = express();
-  const PORT = 3000;
-
-  // Increase payload limit for screenshot forensic uploads
-  app.use(express.json({ limit: '15mb' }));
-  app.use(express.urlencoded({ extended: true, limit: '15mb' }));
-
-  // Security headers & basic CORS for extension communication
-  app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-ThreatLens-Anon-Session');
-    res.setHeader('Access-Control-Expose-Headers', 'X-ThreatLens-Anon-Session');
-    res.setHeader('X-Content-Type-Options', 'nosniff');
-    if (req.method === 'OPTIONS') {
-      return res.sendStatus(200);
-    }
-    next();
-  });
-
-  // API routes FIRST
-  app.use('/api', apiRouter);
+  const PORT = Number(process.env.PORT) || 3000;
 
   // Serve extension files statically so users can view or download
   const extensionPath = path.join(process.cwd(), 'extension');

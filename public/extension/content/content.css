@@ -1,0 +1,15 @@
+/* ThreatLens Content Styles */
+.threatlens-insecure-badge {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 2147483647;
+  padding: 8px 14px;
+  background: #f43f5e;
+  color: #ffffff;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.4);
+}

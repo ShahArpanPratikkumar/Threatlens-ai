@@ -70,19 +70,48 @@ console.log('✅ Extension build verified successfully in:');
 console.log(`   📂 ${outDir}`);
 console.log('   Ready to be loaded unpacked in Google Chrome (chrome://extensions).');
 
-// 4. Create downloadable ZIP archive in public/ directory
+// 4. Also copy extension into public/extension for direct file serving
+const publicExtensionDir = path.join(rootDir, 'public', 'extension');
+copyRecursiveSync(outDir, publicExtensionDir);
+
+// 5. Create downloadable ZIP archive in public/ directory
+const publicDir = path.join(rootDir, 'public');
+if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
+const zipPath = path.join(publicDir, 'threatlens-extension.zip');
+
 try {
   const { execSync } = await import('child_process');
-  const publicDir = path.join(rootDir, 'public');
-  if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir, { recursive: true });
-  execSync(`python3 -c "import zipfile, os
-with zipfile.ZipFile('public/threatlens-extension.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
-    for root, dirs, files in os.walk('dist-extension'):
-        for file in files:
-            p = os.path.join(root, file)
-            zipf.write(p, os.path.relpath(p, 'dist-extension'))
-print('   📦 Generated public/threatlens-extension.zip for direct browser download')
-"`);
+  let packaged = false;
+
+  // Try PowerShell on Windows
+  if (process.platform === 'win32') {
+    try {
+      execSync(`powershell -NoProfile -Command "Compress-Archive -Path 'dist-extension/*' -DestinationPath 'public/threatlens-extension.zip' -Force"`, { stdio: 'ignore' });
+      packaged = true;
+    } catch {}
+  }
+
+  // Try zip command on Unix / Linux / Vercel
+  if (!packaged) {
+    try {
+      execSync(`zip -r -q "public/threatlens-extension.zip" dist-extension/*`, { stdio: 'ignore' });
+      packaged = true;
+    } catch {}
+  }
+
+  // Try python3 / python as fallback
+  if (!packaged) {
+    try {
+      execSync(`python3 -c "import zipfile, os\nwith zipfile.ZipFile('public/threatlens-extension.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:\n    for root, dirs, files in os.walk('dist-extension'):\n        for file in files:\n            p = os.path.join(root, file)\n            zipf.write(p, os.path.relpath(p, 'dist-extension'))"`, { stdio: 'ignore' });
+      packaged = true;
+    } catch {}
+  }
+
+  if (packaged && fs.existsSync(zipPath)) {
+    console.log('   📦 Generated public/threatlens-extension.zip for direct browser download');
+  } else {
+    console.log('   ℹ️ Extension files served directly from public/extension/');
+  }
 } catch (err) {
   console.log('Notice: zip packaging skipped:', err.message);
 }

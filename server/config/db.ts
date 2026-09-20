@@ -27,7 +27,10 @@ interface DBStorage {
   anonymousSessions: StoredAnonymousSession[];
 }
 
-const STORAGE_FILE = path.join(process.cwd(), '.threatlens_data.json');
+const isVercel = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+const STORAGE_FILE = process.env.STORAGE_FILE ||
+  (isVercel ? path.join('/tmp', '.threatlens_data.json') : path.join(process.cwd(), '.threatlens_data.json'));
+const SEED_SOURCE_FILE = path.join(process.cwd(), '.threatlens_data.json');
 
 class StorageManager {
   private data: DBStorage = {
@@ -39,6 +42,7 @@ class StorageManager {
 
   constructor() {
     this.loadData();
+    this.seedDefaultsIfEmpty();
   }
 
   private loadData() {
@@ -46,22 +50,33 @@ class StorageManager {
       if (fs.existsSync(STORAGE_FILE)) {
         const raw = fs.readFileSync(STORAGE_FILE, 'utf-8');
         this.data = JSON.parse(raw);
-        if (!this.data.anonymousSessions) {
-          this.data.anonymousSessions = [];
-        }
+      } else if (fs.existsSync(SEED_SOURCE_FILE)) {
+        const raw = fs.readFileSync(SEED_SOURCE_FILE, 'utf-8');
+        this.data = JSON.parse(raw);
+        this.saveData();
+      }
 
-        // Multi-user migration: associate any legacy unassigned scans to demo analyst
-        const demoUserId = 'usr-demo-03eaaf';
-        let migratedCount = 0;
-        for (const scan of this.data.scans) {
-          if (!scan.userId && !scan.anonymousSessionId) {
-            scan.userId = demoUserId;
-            migratedCount++;
-          }
+      if (!this.data.anonymousSessions) {
+        this.data.anonymousSessions = [];
+      }
+      if (!this.data.users) {
+        this.data.users = [];
+      }
+      if (!this.data.scans) {
+        this.data.scans = [];
+      }
+
+      // Multi-user migration: associate any legacy unassigned scans to demo analyst
+      const demoUserId = 'usr-demo-03eaaf';
+      let migratedCount = 0;
+      for (const scan of this.data.scans) {
+        if (!scan.userId && !scan.anonymousSessionId) {
+          scan.userId = demoUserId;
+          migratedCount++;
         }
-        if (migratedCount > 0) {
-          this.saveData();
-        }
+      }
+      if (migratedCount > 0) {
+        this.saveData();
       }
     } catch {
       // Memory storage fallback

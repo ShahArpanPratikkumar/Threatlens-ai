@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThreatLens AI Quick Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-card">
+    <header class="popup-header">
+      <div class="brand-group">
+        <div class="brand-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <span class="brand-name">THREATLENS AI</span>
+      </div>
+      <button id="btn-open-sidepanel" class="btn-sidepanel-top" title="Open Side Panel">
+        <span>Side Panel ↗</span>
+      </button>
+    </header>
+
+    <div class="tab-target-box">
+      <span class="label">CURRENT TAB</span>
+      <div id="popup-tab-url" class="tab-url-text">Loading active page...</div>
+    </div>
+
+    <button id="btn-popup-inspect" class="btn-primary-action">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+      <span>Inspect Current Page</span>
+    </button>
+
+    <div id="popup-result-card" class="result-card" style="display: none;">
+      <div class="result-top">
+        <div>
+          <div id="popup-risk-level" class="risk-level-badge">SAFE</div>
+          <div id="popup-threat-type" class="threat-type-text">Verified Domain</div>
+        </div>
+        <div class="score-badge">
+          <span id="popup-risk-score">0</span>
+          <span class="score-sub">/ 100</span>
+        </div>
+      </div>
+      <p id="popup-summary-text" class="summary-text"></p>
+    </div>
+
+    <div class="popup-footer">
+      <button id="btn-full-sidepanel" class="btn-link">Expand to Side Panel</button>
+      <button id="btn-open-dashboard" class="btn-link">Open SOC Dashboard ↗</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

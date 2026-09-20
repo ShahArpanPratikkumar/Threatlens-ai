@@ -247,8 +247,6 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 
 <div align="center">
 
-Built with ❤️ by **[ShahArpanPratikkumar](https://github.com/ShahArpanPratikkumar)**
-
 ⭐ **If you find ThreatLens AI useful, please consider giving this repository a star on GitHub!** ⭐
 
 </div>
