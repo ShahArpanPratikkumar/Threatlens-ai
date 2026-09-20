@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+
+# Production & Build outputs
+build/
+dist/
+dist-extension/
+
+# Local databases & user data
+.threatlens_data.json
+*.db
+*.sqlite
+
+# Environment variables & secrets
+.env*
+!.env.example
+
+# Logs & caches
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vite/
+
+# Operating System & IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

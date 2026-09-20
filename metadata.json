@@ -1,0 +1,8 @@
+{
+  "name": "ThreatLens AI",
+  "description": "AI-powered cybersecurity platform detecting phishing websites, scam messages, suspicious URLs, QR scams, and malicious screenshots with explainable risk scoring.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
