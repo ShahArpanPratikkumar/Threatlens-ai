@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThreatLens AI — See the Threat Before You Trust It</title>
+    <meta name="description" content="AI-powered cybersecurity platform detecting phishing websites, scam messages, suspicious URLs, QR scams, and malicious screenshots with explainable risk scoring." />
+    <meta property="og:title" content="ThreatLens AI — See the Threat Before You Trust It" />
+    <meta property="og:description" content="AI-powered cybersecurity platform detecting phishing websites, scam messages, suspicious URLs, QR scams, and malicious screenshots with explainable risk scoring." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('threatlens_theme');
+          var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var isDark = saved === 'dark' || (saved === 'system' && systemDark) || (!saved);
+          if (saved === 'light' || (saved === 'system' && !systemDark)) {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.style.colorScheme = 'light';
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            document.documentElement.style.colorScheme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="antialiased font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
